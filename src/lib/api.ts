@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://nova-bay-backend-production.up.railway.app/api",
-  withCredentials: true, // sends/receives cookies automatically - no manual token handling
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true, // Required to send cookies cross-origin
 });
 
 export default api;
