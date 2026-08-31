@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -13,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Heart, Loader2, ShoppingCart, Trash2, Star, Sparkles, PackageX } from "lucide-react";
 
 export default function WishlistPage() {
-  const router = useRouter();
   const setItemIds = useWishlistStore((state) => state.setItemIds);
   const removeId = useWishlistStore((state) => state.removeId);
 
@@ -28,7 +26,7 @@ export default function WishlistPage() {
       setItemIds(response.data.map((p) => p._id));
     } catch (err: any) {
       if (err.response?.status === 401) {
-        router.push("/login");
+        toast.error("Please log in to view your wishlist.");
       } else {
         toast.error("Failed to load your wishlist.");
       }
@@ -145,7 +143,6 @@ export default function WishlistPage() {
                       </div>
                     )}
 
-                    {/* Quick remove - top right corner of the image */}
                     <button
                       onClick={(e) => {
                         e.preventDefault();

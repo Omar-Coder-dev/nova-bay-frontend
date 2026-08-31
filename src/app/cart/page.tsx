@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -20,7 +19,6 @@ import {
 } from "lucide-react";
 
 export default function CartPage() {
-  const router = useRouter();
   const setItemCount = useCartStore((state) => state.setItemCount);
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +36,7 @@ export default function CartPage() {
       syncCount(response.data);
     } catch (err: any) {
       if (err.response?.status === 401) {
-        router.push("/login");
+        toast.error("Please log in to view your cart.");
       } else {
         toast.error("Failed to load your cart.");
       }
@@ -165,7 +163,6 @@ export default function CartPage() {
                         />
                       </Link>
 
-                      {/* Mobile layout title & price */}
                       <div className="flex flex-1 flex-col sm:hidden">
                         <Link
                           href={`/products/${item.product._id}`}
@@ -180,7 +177,6 @@ export default function CartPage() {
                     </div>
 
                     <div className="flex flex-1 flex-col justify-between gap-3">
-                      {/* Desktop layout title & remove button */}
                       <div className="hidden items-start justify-between gap-2 sm:flex">
                         <div>
                           <Link
@@ -204,7 +200,6 @@ export default function CartPage() {
                         </button>
                       </div>
 
-                      {/* Quantity control & total price row */}
                       <div className="flex items-center justify-between border-t border-border/50 pt-2 sm:border-t-0 sm:pt-0">
                         <div className="flex items-center rounded-lg border border-border">
                           <button
@@ -241,7 +236,6 @@ export default function CartPage() {
                             ${(item.product.price * item.quantity).toFixed(2)}
                           </span>
 
-                          {/* Mobile remove button */}
                           <button
                             onClick={() => handleRemoveItem(item.product._id, item.product.name)}
                             disabled={isUpdating}
