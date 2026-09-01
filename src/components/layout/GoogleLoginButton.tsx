@@ -43,7 +43,7 @@ export default function GoogleLoginButton() {
         const res = await api.post("/auth/google", {
           idToken: response.credential,
         });
-
+        localStorage.setItem("token", res.data.token);
         setUser(res.data);
         toast.success("Signed in with Google!");
         router.push("/");
