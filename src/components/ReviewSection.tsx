@@ -307,7 +307,7 @@ export default function ReviewSection({ productId }: ReviewSectionProps) {
                     </p>
                   </div>
 
-                  {isOwner && (
+                  {(isOwner || user?.role === "admin") && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleStartEdit(review)}
