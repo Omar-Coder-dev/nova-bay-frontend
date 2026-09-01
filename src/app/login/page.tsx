@@ -48,6 +48,8 @@ export default function LoginPage() {
     try {
       const response = await api.post("/auth/login", { email, password });
 
+      localStorage.setItem("token", response.data.token); // NEW - fallback for mobile browsers
+
       if (rememberMe) {
         localStorage.setItem("remembered_email", email);
       } else {
@@ -58,7 +60,8 @@ export default function LoginPage() {
       router.push("/");
     } catch (err: any) {
       setError(
-        err.response?.data?.message || "Something went wrong. Please try again."
+        err.response?.data?.message ||
+          "Something went wrong. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -95,7 +98,10 @@ export default function LoginPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <Label
+                htmlFor="email"
+                className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+              >
                 Email Address
               </Label>
               <div className="relative">
@@ -113,7 +119,10 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <Label
+                htmlFor="password"
+                className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+              >
                 Password
               </Label>
               <div className="relative">
@@ -133,7 +142,11 @@ export default function LoginPage() {
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -143,10 +156,15 @@ export default function LoginPage() {
                 <Checkbox
                   id="remember"
                   checked={rememberMe}
-                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked as boolean)
+                  }
                   className="border-border data-[state=checked]:bg-blue-600"
                 />
-                <Label htmlFor="remember" className="text-sm font-medium text-muted-foreground cursor-pointer">
+                <Label
+                  htmlFor="remember"
+                  className="text-sm font-medium text-muted-foreground cursor-pointer"
+                >
                   Remember me
                 </Label>
               </div>
@@ -182,7 +200,10 @@ export default function LoginPage() {
         <CardFooter className="flex justify-center border-t border-border pt-5 bg-card rounded-b-xl">
           <p className="text-sm font-medium text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-bold text-blue-500 hover:text-blue-400 hover:underline">
+            <Link
+              href="/register"
+              className="font-bold text-blue-500 hover:text-blue-400 hover:underline"
+            >
               Create account
             </Link>
           </p>

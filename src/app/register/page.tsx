@@ -18,7 +18,15 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { User, Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Loader2,
+  ArrowRight,
+} from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -37,12 +45,20 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const response = await api.post("/auth/register", { name, email, password });
+      const response = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", response.data.token); // NEW - fallback for mobile browsers
+
       setUser(response.data);
       router.push("/");
     } catch (err: any) {
       setError(
-        err.response?.data?.message || "Something went wrong. Please try again."
+        err.response?.data?.message ||
+          "Something went wrong. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -82,7 +98,10 @@ export default function RegisterPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-foreground">
+              <Label
+                htmlFor="name"
+                className="text-xs font-bold uppercase tracking-wider text-foreground"
+              >
                 Full Name
               </Label>
               <div className="relative">
@@ -100,7 +119,10 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-foreground">
+              <Label
+                htmlFor="email"
+                className="text-xs font-bold uppercase tracking-wider text-foreground"
+              >
                 Email Address
               </Label>
               <div className="relative">
@@ -118,7 +140,10 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-foreground">
+              <Label
+                htmlFor="password"
+                className="text-xs font-bold uppercase tracking-wider text-foreground"
+              >
                 Password
               </Label>
               <div className="relative">
@@ -139,7 +164,11 @@ export default function RegisterPage() {
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -167,7 +196,10 @@ export default function RegisterPage() {
         <CardFooter className="flex justify-center border-t border-border pt-5 bg-card rounded-b-xl">
           <p className="text-sm font-medium text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="font-bold text-blue-600 hover:text-blue-500 hover:underline">
+            <Link
+              href="/login"
+              className="font-bold text-blue-600 hover:text-blue-500 hover:underline"
+            >
               Sign in
             </Link>
           </p>
