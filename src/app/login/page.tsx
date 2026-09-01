@@ -48,6 +48,8 @@ export default function LoginPage() {
     try {
       const response = await api.post("/auth/login", { email, password });
 
+      alert("Token received: " + response.data.token); // TEMPORARY - remove after testing
+
       localStorage.setItem("token", response.data.token); // NEW - fallback for mobile browsers
 
       if (rememberMe) {
