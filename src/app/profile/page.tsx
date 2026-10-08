@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import api from "@/lib/api";
@@ -14,16 +14,27 @@ import { User, MapPin, Loader2, Save } from "lucide-react";
 export default function ProfilePage() {
   const router = useRouter();
   const { user, setUser } = useAuthStore();
-  // Pre-fill the form with whatever's already in the auth store,
-  // since Navbar already fetched this on page load - no need to fetch again.
+
   const [name, setName] = useState(user?.name || "");
   const [address, setAddress] = useState(user?.address || "");
   const [saving, setSaving] = useState(false);
 
-  // If somehow this page loads before the auth check finishes (or user isn't
-  // logged in at all), send them to login instead of showing a broken form.
+  // Safely redirect on client-side only when unauthenticated
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user, router]);
+
+  // Keep local state in sync if store user loads asynchronously
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setAddress(user.address || "");
+    }
+  }, [user]);
+
   if (!user) {
-    router.push("/login");
     return null;
   }
 
@@ -51,9 +62,6 @@ export default function ProfilePage() {
           onSubmit={handleSubmit}
           className="space-y-6 rounded-2xl border border-border bg-card p-6"
         >
-          {/* Email is shown but never editable - changing an email usually
-              needs re-verification, which is out of scope here, so we
-              just display it as read-only info. */}
           <div className="space-y-2">
             <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Email
