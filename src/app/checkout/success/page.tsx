@@ -1,10 +1,28 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import api from "@/lib/api";
+import { useCartStore } from "@/store/cartStore";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ShoppingBag, Package } from "lucide-react";
 
 export default function CheckoutSuccessPage() {
+  const setItemCount = useCartStore((state) => state.setItemCount);
+
+  useEffect(() => {
+    const clearUserCart = async () => {
+      try {
+        await api.delete("/cart");
+        setItemCount(0);
+      } catch (err) {
+        console.error("Failed to clear cart after checkout:", err);
+      }
+    };
+
+    clearUserCart();
+  }, [setItemCount]);
+
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center bg-background px-4 py-12 text-center">
       <div className="mx-auto max-w-md space-y-6">
